@@ -3,6 +3,7 @@ const { ethers } = pkg;
 import { expect } from "chai";
 
 describe("RewardToken", function () {
+  // Declare variables to hold the deployed contract instance and signers
   let rewardToken;
   let owner;
   let user;
