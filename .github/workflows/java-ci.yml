@@ -62,5 +62,9 @@ jobs:
         working-directory: ./web3-reward-api/smart-contract
 
       - name: Run Hardhat tests
+        env:
+          INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
         run: npx hardhat test
         working-directory: ./web3-reward-api/smart-contract
