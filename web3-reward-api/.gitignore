@@ -1,0 +1,17 @@
+# Environment variables
+.env
+
+# IDE files
+.idea/
+*.iml
+
+# Maven
+target/
+
+# Node
+node_modules/
+npm-debug.log
+
+# Build artifacts
+/dist
+/.vite

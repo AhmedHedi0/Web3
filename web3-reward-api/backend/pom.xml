@@ -87,29 +87,33 @@
         </plugin>
 
         <plugin>
-            <groupId>org.web3j</groupId>
-            <artifactId>web3j-maven-plugin</artifactId>
-            <version>4.10.0</version>
-            <executions>
-                <execution>
-                    <id>generate-contracts</id>
-                    <phase>generate-sources</phase>
-                    <goals>
-                        <goal>generate-sources</goal>
-                    </goals>
-                    <configuration>
-                        <packageName>com.Ahmed.web3_service.contracts</packageName>
-                        <sourceDestination>${project.build.directory}/generated-sources/web3j</sourceDestination>
-                        <abiSourceFiles>
-                            <directory>${project.basedir}/../smart-contract/artifacts/contracts/RewardToken.sol</directory>
-                            <includes>
-                                <include>RewardToken.json</include>
-                            </includes>
-                        </abiSourceFiles>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
+		<groupId>org.web3j</groupId>
+		<artifactId>web3j-maven-plugin</artifactId>
+		<version>4.10.0</version>
+		<executions>
+			<execution>
+			<id>generate-contracts</id>
+			<phase>generate-sources</phase>
+			<goals>
+				<goal>generate-sources</goal>
+			</goals>
+			<configuration>
+				<packageName>com.Ahmed.web3_service.contracts</packageName>
+				<sourceDestination>${project.build.directory}/generated-sources/web3j</sourceDestination>
+				<abiSourceFiles>
+				<directory>${project.basedir}/../smart-contract/artifacts/contracts/RewardToken.sol</directory>
+				<includes>
+					<include>RewardToken.json</include>
+				</includes>
+				<excludes>
+					<exclude>*.dbg.json</exclude>
+				</excludes>
+				</abiSourceFiles>
+			</configuration>
+			</execution>
+		</executions>
+		</plugin>
+
 
         <plugin>
             <groupId>org.codehaus.mojo</groupId>
