@@ -7,6 +7,10 @@ WORKDIR /app/backend
 COPY backend/pom.xml .
 COPY backend/.mvn/ .mvn
 COPY backend/mvnw .
+
+# Make the Maven wrapper script executable
+RUN chmod +x ./mvnw
+
 # Copy the Hardhat artifacts which contain the contract ABI
 COPY smart-contract/artifacts /app/smart-contract/artifacts
 
