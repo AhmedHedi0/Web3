@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Launch Spring Boot Backend",
+      "request": "launch",
+      "mainClass": "com.Ahmed.web3_service.Web3ServiceApplication",
+      "projectName": "web3-service",
+      "envFile": "${workspaceFolder}/web3-reward-api/backend/.env"
+    }
+  ]
+}

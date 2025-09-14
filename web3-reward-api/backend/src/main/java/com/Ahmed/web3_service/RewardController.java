@@ -38,47 +38,5 @@ public class RewardController {
             }
         }).orElse(ResponseEntity.notFound().build());
     }
-    @PostMapping("/register-user")
-    public ResponseEntity<?> registerUser(@RequestBody User newUser) {
-        if (newUser.getWalletAddress() == null || newUser.getWalletAddress().isEmpty()) {
-            return ResponseEntity.badRequest().body("Wallet address is required.");
-        }
-        User savedUser = userRepository.save(newUser);
-        return ResponseEntity.ok(savedUser);
-    }
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getUser(@PathVariable Long userId) {
-        return userRepository.findById(userId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-    @GetMapping("/user/wallet/{walletAddress}")
-    public ResponseEntity<?> getUserByWalletAddress(@PathVariable String walletAddress) {
-        return userRepository.findByWalletAddress(walletAddress)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-    @PutMapping("/user/{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody User updatedUser) {
-        return userRepository.findById(userId).map(user -> {
-            user.setUsername(updatedUser.getUsername());
-            user.setEmail(updatedUser.getEmail());
-            user.setWalletAddress(updatedUser.getWalletAddress());
-            User savedUser = userRepository.save(user);
-            return ResponseEntity.ok(savedUser);
-        }).orElse(ResponseEntity.notFound().build());
-    }
-    @DeleteMapping("/user/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
-        if (!userRepository.existsById(userId)) {
-            return ResponseEntity.notFound().build();
-        }
-        userRepository.deleteById(userId);
-        return ResponseEntity.noContent().build();
-    }
-    @GetMapping("/users")
-    public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.ok(userRepository.findAll());
-    }
     
 }         

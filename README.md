@@ -2,7 +2,7 @@
  
  # Web3 Reward API
  
- This project is a full-stack decentralized application demonstrating how a Java Spring Boot backend can interact with an Ethereum smart contract. The application provides a REST API to manage users and issue ERC-20 token rewards for specific actions.
+ This project is a full-stack decentralized application demonstrating how a Java Spring Boot backend can interact with an Ethereum smart contract. It includes a React frontend for user interaction, a backend API for user management and reward issuance, and a Solidity smart contract for the token.
  
  ## Table of Contents
  
@@ -11,18 +11,27 @@
  - [Technologies Used](#technologies-used)
  - [Prerequisites](#prerequisites)
  - [Getting Started](#getting-started)
-   - [1. Smart Contract Setup](#1-smart-contract-setup)
-   - [2. Backend Setup](#2-backend-setup)
+   - [1. Smart Contract](#1-smart-contract)
+   - [2. Backend](#2-backend)
+   - [3. Frontend](#3-frontend)
  - [API Endpoints](#api-endpoints)
  - [Running Tests](#running-tests)
  - [CI/CD](#cicd)
  
  ## Features
  
- - **User Management**: CRUD operations for users, including wallet address registration.
- - **Token Rewards**: An endpoint to issue a fixed amount of ERC-20 tokens to a user's wallet address.
- - **Smart Contract Interaction**: Uses Web3j to load and interact with a deployed `RewardToken` smart contract.
- - **Automated Contract Wrappers**: Leverages the `web3j-maven-plugin` to automatically generate Java wrappers from the smart contract ABI.
+ - **Backend API**:
+   - User management with CRUD operations.
+   - An endpoint to issue a fixed amount of ERC-20 tokens to a user's wallet.
+   - Uses Web3j to interact with the deployed `RewardToken` smart contract.
+ - **Frontend UI**:
+   - Simple interface to register an email and wallet address.
+   - Automatically claims a reward after successful registration.
+   - Client-side validation for inputs.
+   - Clear feedback for loading, success, and error states.
+   - Direct link to the transaction on Etherscan upon success.
+ - **Smart Contract**:
+   - A standard ERC-20 token with a `reward` function to mint and transfer tokens.
  
  ## Project Structure
  
