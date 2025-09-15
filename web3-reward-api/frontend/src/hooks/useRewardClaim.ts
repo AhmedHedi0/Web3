@@ -41,6 +41,9 @@ export const useRewardClaim = () => {
     }
 
     try {
+      // Ensure the site is connected to MetaMask before making the request.
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+
       // 'wallet_watchAsset' is the method that prompts the user to add a token
       const wasAdded = await window.ethereum.request({
         method: 'wallet_watchAsset',
