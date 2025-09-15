@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigInteger;
 import java.util.Map;
 
+@CrossOrigin(origins = "https://web3-ahmedhedi0s-projects.vercel.app/")
 @RestController
 @RequestMapping("/api/rewards")
 public class RewardController {
