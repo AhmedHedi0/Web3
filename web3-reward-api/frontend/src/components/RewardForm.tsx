@@ -45,7 +45,11 @@ export const RewardForm = () => {
         </button>
       </form>
 
-      <StatusDisplay status={status} error={error} result={result} onAddToken={addTokenToMetaMask} />
+      <button onClick={addTokenToMetaMask} className="add-token-button" disabled={isSubmitting}>
+        Add RewardToken to MetaMask
+      </button>
+
+      <StatusDisplay status={status} error={error} result={result} />
     </>
   );
 };
@@ -54,10 +58,9 @@ interface StatusDisplayProps {
   status: Status;
   error: string | null;
   result: RewardResult | null;
-  onAddToken: () => void;
 }
 
-const StatusDisplay = ({ status, error, result, onAddToken }: StatusDisplayProps) => {
+const StatusDisplay = ({ status, error, result }: StatusDisplayProps) => {
   if (status === 'submitting') {
     return <div className="spinner"></div>;
   }
@@ -73,9 +76,6 @@ const StatusDisplay = ({ status, error, result, onAddToken }: StatusDisplayProps
             {`${result.txHash.substring(0, 10)}...${result.txHash.substring(result.txHash.length - 8)}`}
           </a>
         </p>
-        <button onClick={onAddToken} className="add-token-button">
-          Add RewardToken to MetaMask
-        </button>
       </div>
     );
   }

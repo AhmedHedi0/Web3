@@ -41,8 +41,19 @@ export const useRewardClaim = () => {
     }
 
     try {
-      // Ensure the site is connected to MetaMask before making the request.
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      // Check if the site is already connected.
+      let accounts = await window.ethereum.request({ method: 'eth_accounts' });
+
+      // If not connected, request connection.
+      if (!accounts || accounts.length === 0) {
+        accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      }
+
+      // If still no accounts, user has denied the connection.
+      if (!accounts || accounts.length === 0) {
+        console.log('User denied account access.');
+        return;
+      }
 
       // 'wallet_watchAsset' is the method that prompts the user to add a token
       const wasAdded = await window.ethereum.request({
