@@ -25,7 +25,7 @@ export const useRewardClaim = () => {
 
   const addTokenToMetaMask = async () => {
     const tokenAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
-    const tokenSymbol = 'RTK'; // Your token's symbol
+    const tokenSymbol = 'RWT'; // Your token's symbol
     const tokenDecimals = 18;  // Your token's decimals
 
     if (!tokenAddress) {
