@@ -3,6 +3,12 @@ import { isAddress } from 'ethers/lib/utils';
 import { AxiosError } from 'axios';
 import * as api from '../api';
 
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
+
 export type Status = 'idle' | 'submitting' | 'success' | 'error';
 
 export interface RewardResult {
@@ -16,6 +22,43 @@ export const useRewardClaim = () => {
   const [result, setResult] = useState<RewardResult | null>(null);
 
   const isSubmitting = status === 'submitting';
+
+  const addTokenToMetaMask = async () => {
+    const tokenAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
+    const tokenSymbol = 'RTK'; // Your token's symbol
+    const tokenDecimals = 18;  // Your token's decimals
+
+    if (!tokenAddress) {
+      const message = "Contract address is not configured. Cannot add token.";
+      console.error(message);
+      alert(message);
+      return;
+    }
+
+    if (typeof window.ethereum === 'undefined') {
+      alert('MetaMask is not installed. Please install it to add the token.');
+      return;
+    }
+
+    try {
+      // 'wallet_watchAsset' is the method that prompts the user to add a token
+      const wasAdded = await window.ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: tokenAddress,
+            symbol: tokenSymbol,
+            decimals: tokenDecimals,
+          },
+        },
+      });
+
+      console.log(wasAdded ? 'RewardToken has been added to MetaMask.' : 'User declined to add the token.');
+    } catch (error) {
+      console.error('Error adding token to MetaMask:', error);
+    }
+  };
 
   const claimReward = async ({ email, walletAddress }: { email: string; walletAddress: string }) => {
     setStatus('submitting');
@@ -61,5 +104,6 @@ export const useRewardClaim = () => {
     result,
     isSubmitting,
     claimReward,
+    addTokenToMetaMask,
   };
 };

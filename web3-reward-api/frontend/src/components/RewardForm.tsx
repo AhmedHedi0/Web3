@@ -6,7 +6,7 @@ const SEPOLIA_EXPLORER_URL = 'https://sepolia.etherscan.io/tx/';
 export const RewardForm = () => {
   const [email, setEmail] = useState('');
   const [walletAddress, setWalletAddress] = useState('');
-  const { claimReward, isSubmitting, status, error, result } = useRewardClaim();
+  const { claimReward, addTokenToMetaMask, isSubmitting, status, error, result } = useRewardClaim();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -45,7 +45,7 @@ export const RewardForm = () => {
         </button>
       </form>
 
-      <StatusDisplay status={status} error={error} result={result} />
+      <StatusDisplay status={status} error={error} result={result} onAddToken={addTokenToMetaMask} />
     </>
   );
 };
@@ -54,9 +54,10 @@ interface StatusDisplayProps {
   status: Status;
   error: string | null;
   result: RewardResult | null;
+  onAddToken: () => void;
 }
 
-const StatusDisplay = ({ status, error, result }: StatusDisplayProps) => {
+const StatusDisplay = ({ status, error, result, onAddToken }: StatusDisplayProps) => {
   if (status === 'submitting') {
     return <div className="spinner"></div>;
   }
@@ -72,6 +73,9 @@ const StatusDisplay = ({ status, error, result }: StatusDisplayProps) => {
             {`${result.txHash.substring(0, 10)}...${result.txHash.substring(result.txHash.length - 8)}`}
           </a>
         </p>
+        <button onClick={onAddToken} className="add-token-button">
+          Add RewardToken to MetaMask
+        </button>
       </div>
     );
   }

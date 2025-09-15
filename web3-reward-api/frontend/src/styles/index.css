@@ -121,3 +121,13 @@ button:disabled {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.add-token-button {
+  margin-top: 1rem;
+  background-color: #4a4a4a;
+  border-color: #666;
+}
+
+.add-token-button:hover {
+  border-color: #8ab4f8;
+}

@@ -1,174 +1,114 @@
- [![Full Stack CI](https://github.com/AhmedHedi0/Web3/actions/workflows/java-ci.yml/badge.svg?branch=main)](https://github.com/AhmedHedi0/Web3/actions/workflows/java-ci.yml)
- 
- # Web3 Reward API
- 
- This project is a full-stack decentralized application demonstrating how a Java Spring Boot backend can interact with an Ethereum smart contract. It includes a React frontend for user interaction, a backend API for user management and reward issuance, and a Solidity smart contract for the token.
- 
- ## Table of Contents
- 
- - [Features](#features)
- - [Project Structure](#project-structure)
- - [Technologies Used](#technologies-used)
- - [Prerequisites](#prerequisites)
- - [Getting Started](#getting-started)
-   - [1. Smart Contract](#1-smart-contract)
-   - [2. Backend](#2-backend)
-   - [3. Frontend](#3-frontend)
- - [API Endpoints](#api-endpoints)
- - [Running Tests](#running-tests)
- - [CI/CD](#cicd)
- 
- ## Features
- 
- - **Backend API**:
-   - User management with CRUD operations.
-   - An endpoint to issue a fixed amount of ERC-20 tokens to a user's wallet.
-   - Uses Web3j to interact with the deployed `RewardToken` smart contract.
- - **Frontend UI**:
-   - Simple interface to register an email and wallet address.
-   - Automatically claims a reward after successful registration.
-   - Client-side validation for inputs.
-   - Clear feedback for loading, success, and error states.
-   - Direct link to the transaction on Etherscan upon success.
- - **Smart Contract**:
-   - A standard ERC-20 token with a `reward` function to mint and transfer tokens.
- 
- ## Project Structure
- 
- ```
- .
- ├── backend/         # Spring Boot application
- │   ├── pom.xml
- │   └── src/
- ├── smart-contract/  # Hardhat project for the Solidity smart contract
- │   ├── contracts/
- │   ├── scripts/
- │   └── hardhat.config.js
- └── .github/         # GitHub Actions CI/CD workflow
- ```
- 
- ## Technologies Used
- 
- - **Backend**: Java 21, Spring Boot 3, Maven
- - **Blockchain**: Web3j, Solidity
- - **Smart Contract Development**: Hardhat, Ethers.js
- - **Database**: H2 (In-memory, for demonstration)
- - **Testing**: JUnit 5, Mockito
- 
- ## Prerequisites
- 
- - JDK 21 or later
- - Apache Maven
- - Node.js and npm
- - An Ethereum testnet account with some test ETH (e.g., on Sepolia).
- - An RPC URL from a node provider like Infura or Alchemy.
- 
- ## Getting Started
- 
- Follow these steps to set up and run the project locally.
- 
- ### 1. Smart Contract Setup
- 
- First, you need to compile and deploy the `RewardToken` smart contract.
- 
- ```bash
- # Navigate to the smart contract directory
- cd smart-contract
- 
- # Install dependencies
- npm install
- 
- # Compile the smart contract
- npx hardhat compile
- ```
- 
- Before deploying, create a `.env` file in the `smart-contract` directory and add your deployment configuration:
- 
- **smart-contract/.env**
- ```
- PRIVATE_KEY=YOUR_ETHEREUM_ACCOUNT_PRIVATE_KEY
- INFURA_API_KEY=YOUR_INFURA_API_KEY 
- ETHSCAN_API_KEY=YOUR_ETHSCAN_API_KEY
- ```
- 
- Now, deploy the contract to a test network (e.g., Sepolia):
- 
- ```bash
- npx hardhat run scripts/deploy.js --network sepolia
- ```
- 
- After a successful deployment, **copy the deployed contract address** printed in the console. You will need it for the backend configuration.
- 
- ### 2. Backend Setup
- 
- Next, configure and run the Spring Boot application.
- 
- 1.  **Copy the ABI:** After compiling the smart contract, copy the generated ABI file to the backend's resources directory. This is required for the Web3j plugin to generate the Java wrapper.
-     -   **From:** `smart-contract/artifacts/contracts/RewardToken.sol/RewardToken.json`
-     -   **To:** `backend/src/main/resources/solidity/RewardToken.json`
- 
- 2.  **Configure the Backend:** Create an `application.properties` file in `backend/src/main/resources/` and add your blockchain credentials.
- 
-     **backend/src/main/resources/application.properties**
-     ```properties
-     # Web3 Configuration
-     infura.url=YOUR_INFURA_OR_ALCHEMY_RPC_URL
-     wallet.private-key=YOUR_ETHEREUM_ACCOUNT_PRIVATE_KEY
-     contract.address=THE_DEPLOYED_CONTRACT_ADDRESS_FROM_STEP_1
-     
-     # H2 Database Configuration
-     spring.h2.console.enabled=true
-     spring.datasource.url=jdbc:h2:mem:testdb
-     spring.datasource.driverClassName=org.h2.Driver
-     spring.datasource.username=sa
-     spring.datasource.password=
-     spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-     ```
- 
- 3.  **Build and Run:**
- 
-     ```bash
-     # Navigate to the backend directory
-     cd backend
-     
-     # Compile the project. This will also trigger the web3j-maven-plugin
-     # to generate the RewardToken.java wrapper class.
-     mvn compile
-     
-     # Run the application
-     mvn spring-boot:run
-     ```
- 
- The application will be running at `http://localhost:8080`.
- 
- ## API Endpoints
- 
- | Method | Endpoint                               | Description                                  |
- | :----- | :------------------------------------- | :------------------------------------------- |
- | `POST` | `/api/users/register`                  | Registers a new user.                        |
- | `GET`    | `/api/users`                           | Retrieves a list of all users.               |
- | `GET`    | `/api/users/{id}`                      | Retrieves a user by their ID.                |
- | `GET`    | `/api/users/wallet/{walletAddress}`    | Retrieves a user by their wallet address.    |
- | `PUT`    | `/api/users/{id}`                      | Updates an existing user's information.      |
- | `DELETE` | `/api/users/{id}`                      | Deletes a user by their ID.                  |
- | `POST`   | `/api/rewards/issue/{userId}`          | Issues a token reward to the specified user. |
- 
- ## Running Tests
- 
- To run the backend unit and integration tests, navigate to the `backend` directory and run:
- 
- ```bash
- mvn test
- ```
- 
- ## CI/CD
- 
- This project includes a GitHub Actions workflow defined in `.github/workflows/ci.yml`. The workflow is triggered on every push to the `main` branch and performs the following steps:
- 1.  Sets up Java and Maven.
- 2.  Builds the Spring Boot application.
- 3.  Runs all tests to ensure code quality and correctness.
+# Full-Stack Web3 User Registration App
 
- For GitHub Actions, these same values need to be added as **Repository Secrets**:  
-1. Go to your GitHub repo → `Settings` → `Secrets and variables` → `Actions`.  
-2. Add each key (`INFURA_API_KEY`, `ETHSCAN_API_KEY`, `PRIVATE_KEY`, `ISSUER_PRIVATE_KEY`) with the appropriate value.  
-3. The CI workflow will use these secrets automatically.
+This is a complete full-stack application that allows users to register using their email and wallet address. The system is built with a Java Spring Boot backend, a Vite-based frontend, and is deployed on a modern cloud infrastructure.
+
+## Tech Stack & Architecture
+
+This project uses a decoupled architecture with a REST API connecting the frontend and backend.
+
+### Backend
+
+  * **Framework:** Spring Boot 3
+  * **Language:** Java 21
+  * **Database:** PostgreSQL (managed by Supabase)
+  * **Data Access:** Spring Data JPA (Hibernate)
+  * **Web3:** Web3j for smart contract interaction
+  * **Containerization:** Docker
+
+### Frontend
+
+  * **Framework:** Vite (likely React, Vue, or similar)
+  * **Language:** JavaScript/TypeScript
+  * **Styling:** CSS
+
+### Deployment
+
+  * **Backend:** Deployed as a Docker container on **Google Cloud Run**.
+  * **Frontend:** Deployed on **Vercel**.
+  * **Database:** Hosted on **Supabase**.
+  * **Secrets Management:** **GCP Secret Manager**.
+
+-----
+
+## Getting Started
+
+### Prerequisites
+
+  * Java 21 (or higher)
+  * Apache Maven
+  * Node.js & npm
+  * Docker
+  * A PostgreSQL database (local or cloud-hosted like Supabase)
+
+### Backend Setup (Local)
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/AhmedHedi0/Web3.git
+    cd Web3/backend
+    ```
+
+2.  **Configure the database:**
+    Open `src/main/resources/application.properties` and update the datasource properties to point to your local PostgreSQL database.
+
+    ```properties
+    spring.datasource.url=jdbc:postgresql://localhost:5432/your-db-name
+    spring.datasource.username=your-username
+    spring.datasource.password=your-password
+    spring.jpa.hibernate.ddl-auto=update
+    ```
+
+3.  **Build and run the application:**
+
+    ```bash
+    mvn clean install
+    mvn spring-boot:run
+    ```
+
+    The backend server will start on `http://localhost:8080`.
+
+-----
+
+### Frontend Setup (Local)
+
+1.  **Navigate to the frontend directory:**
+
+    ```bash
+    # From the root directory
+    cd frontend 
+    ```
+
+2.  **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+3.  **Configure the API endpoint:**
+    Create a file named `.env.local` in the `frontend` directory and add the following line to point to your local backend server:
+
+    ```
+    VITE_API_BASE_URL=http://localhost:8080
+    ```
+
+4.  **Run the development server:**
+
+    ```bash
+    npm run dev
+    ```
+
+    The frontend will be available at `http://localhost:5173` (or another port specified by Vite).
+
+-----
+
+## API Endpoints
+
+The backend exposes the following REST API endpoints under the base path `/api/users`.
+
+| Method | Endpoint              | Description                                                                                                    |
+| :----- | :-------------------- | :------------------------------------------------------------------------------------------------------------- |
+| `POST` | `/register`           | Registers a new user or returns the existing user if the wallet address is already present (responds with 409 Conflict). |
+| `GET`  | `/`                   | Retrieves a list of all registered users.                                                                      |
+| `GET`  | `/{userId}`           | Retrieves a single user by their unique ID. Returns 404 Not Found if the user does not exist.                    |
+| `PUT`  | `/{userId}`           | Updates the details of an existing user.                                                                       |
