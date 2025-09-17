@@ -1,3 +1,5 @@
+![Full Stack CI](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+
 # Full-Stack Web3 User Registration App
 
 This is a complete full-stack application that allows users to register using their email and wallet address. The system is built with a Java Spring Boot backend, a Vite-based frontend, and is deployed on a modern cloud infrastructure.
