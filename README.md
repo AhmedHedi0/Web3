@@ -1,4 +1,4 @@
-![Full Stack CI](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+ [![Full Stack CI](https://github.com/AhmedHedi0/Web3/actions/workflows/java-ci.yml/badge.svg?branch=main)](https://github.com/AhmedHedi0/Web3/actions/workflows/java-ci.yml)
 
 # Full-Stack Web3 User Registration App
 
